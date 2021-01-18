@@ -71,5 +71,4 @@ url = f'https://www.tpex.org.tw/web/stock/3insti/sitc_trading/sitctr_result.php?
 with open(DB_PATH + strip_date + '.txt', 'w') as f:
     for i in 同買:
         print(i, int(上次紀錄.get(i, 0)) + 1, file=f, sep='\t')
-        print(i, int(上次紀錄.get(i, 0)) + 1, sep='\t')
 #pickle.dump(同買, open(DB_PATH + strip_date + '.pkl', 'wb'))
