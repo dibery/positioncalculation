@@ -20,8 +20,8 @@ web = bs(get(f'https://www.taifex.com.tw/cht/3/futContractsDate?queryDate={date}
 外資小台未平空方 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[8].text.strip().replace(',', ''))
 投信小台未平多方 = int(web.findAll('table')[2].findAll('tr')[9].findAll('td')[6].text.strip().replace(',', ''))
 投信小台未平空方 = int(web.findAll('table')[2].findAll('tr')[9].findAll('td')[8].text.strip().replace(',', ''))
-自營小台未平多方 = int(web.findAll('table')[2].findAll('tr')[8].findAll('td')[7].text.strip().replace(',', ''))
-自營小台未平空方 = int(web.findAll('table')[2].findAll('tr')[8].findAll('td')[9].text.strip().replace(',', ''))
+自營小台未平多方 = int(web.findAll('table')[2].findAll('tr')[8].findAll('td')[6].text.strip().replace(',', ''))
+自營小台未平空方 = int(web.findAll('table')[2].findAll('tr')[8].findAll('td')[8].text.strip().replace(',', ''))
 
 web = bs(get(f'https://www.taifex.com.tw/cht/3/futContractsDate?queryDate={date}&commodityId=TXF').text, 'lxml')
 外資大台未平口數 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[-2].text.strip().replace(',', ''))
