@@ -16,12 +16,12 @@ web = json.loads(get('https://www.twse.com.tw/fund/BFI82U?dayDate=%s' % date.rep
 
 web = bs(get(f'https://www.taifex.com.tw/cht/3/futContractsDate?queryDate={date}&commodityId=MXF').text, 'lxml')
 外資小台未平口數 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[-2].text.strip().replace(',', ''))
-外資小台未平多方 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[7].text.strip().replace(',', ''))
-外資小台未平空方 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[9].text.strip().replace(',', ''))
-投信小台未平多方 = int(web.findAll('table')[2].findAll('tr')[9].findAll('td')[7].text.strip().replace(',', ''))
-投信小台未平空方 = int(web.findAll('table')[2].findAll('tr')[9].findAll('td')[9].text.strip().replace(',', ''))
-自營小台未平多方 = int(web.findAll('table')[2].findAll('tr')[8].findAll('td')[8].text.strip().replace(',', ''))
-自營小台未平空方 = int(web.findAll('table')[2].findAll('tr')[8].findAll('td')[10].text.strip().replace(',', ''))
+外資小台未平多方 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[6].text.strip().replace(',', ''))
+外資小台未平空方 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[8].text.strip().replace(',', ''))
+投信小台未平多方 = int(web.findAll('table')[2].findAll('tr')[9].findAll('td')[6].text.strip().replace(',', ''))
+投信小台未平空方 = int(web.findAll('table')[2].findAll('tr')[9].findAll('td')[8].text.strip().replace(',', ''))
+自營小台未平多方 = int(web.findAll('table')[2].findAll('tr')[8].findAll('td')[7].text.strip().replace(',', ''))
+自營小台未平空方 = int(web.findAll('table')[2].findAll('tr')[8].findAll('td')[9].text.strip().replace(',', ''))
 
 web = bs(get(f'https://www.taifex.com.tw/cht/3/futContractsDate?queryDate={date}&commodityId=TXF').text, 'lxml')
 外資大台未平口數 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[-2].text.strip().replace(',', ''))
@@ -31,8 +31,8 @@ web = bs(get(f'https://www.taifex.com.tw/cht/3/dailyFXRate?queryStartDate={date}
 美元匯率 = web.findAll('table')[2].findAll('tr')[1].findAll('td')[1].text.strip()
 
 web = bs(get(f'https://www.taifex.com.tw/cht/3/callsAndPutsDate?queryType=1&queryDate={date}&commodityId=TXO').text, 'lxml')
-外資買權金額 = web.findAll('table')[2].findAll('tr')[7].findAll('td')[12].text.strip().replace(',', '')
-外資賣權金額 = web.findAll('table')[2].findAll('tr')[10].findAll('td')[12].text.strip().replace(',', '')
+外資買權金額 = web.findAll('table')[2].findAll('tr')[7].findAll('td')[11].text.strip().replace(',', '')
+外資賣權金額 = web.findAll('table')[2].findAll('tr')[10].findAll('td')[11].text.strip().replace(',', '')
 
 web = bs(get(f'https://www.taifex.com.tw/cht/3/pcRatio?queryStartDate={date}&queryEndDate={date}').text, 'lxml')
 PC_ratio = web.findAll('table')[3].findAll('tr')[1].findAll('td')[-1].text
