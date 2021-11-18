@@ -4,7 +4,9 @@
 專案網址：https://github.com/dibery/positioncalculation
 歡迎轉發，但必須完整保留此段內容
 '''
-import requests, json, datetime, sys, bs4
+import requests, json, datetime, sys, bs4, urllib3
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 datetime = datetime.datetime
 bs = bs4.BeautifulSoup
@@ -14,7 +16,7 @@ date = sys.argv[1] if len(sys.argv) > 1 else datetime.now().strftime('%Y/%m/%d')
 web = json.loads(get('https://www.twse.com.tw/fund/BFI82U?dayDate=%s' % date.replace('/', '')).text)
 外資買超 = web['data'][3][-1].replace(',', '')
 
-web = bs(get(f'https://www.taifex.com.tw/cht/3/futContractsDate?queryDate={date}&commodityId=MXF').text, 'lxml')
+web = bs(get(f'https://www.taifex.com.tw/cht/3/futContractsDate?queryDate={date}&commodityId=MXF', verify=False).text, 'lxml')
 外資小台未平口數 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[-2].text.strip().replace(',', ''))
 外資小台未平多方 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[6].text.strip().replace(',', ''))
 外資小台未平空方 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[8].text.strip().replace(',', ''))
@@ -23,21 +25,21 @@ web = bs(get(f'https://www.taifex.com.tw/cht/3/futContractsDate?queryDate={date}
 自營小台未平多方 = int(web.findAll('table')[2].findAll('tr')[8].findAll('td')[6].text.strip().replace(',', ''))
 自營小台未平空方 = int(web.findAll('table')[2].findAll('tr')[8].findAll('td')[8].text.strip().replace(',', ''))
 
-web = bs(get(f'https://www.taifex.com.tw/cht/3/futContractsDate?queryDate={date}&commodityId=TXF').text, 'lxml')
+web = bs(get(f'https://www.taifex.com.tw/cht/3/futContractsDate?queryDate={date}&commodityId=TXF', verify=False).text, 'lxml')
 外資大台未平口數 = int(web.findAll('table')[2].findAll('tr')[10].findAll('td')[-2].text.strip().replace(',', ''))
 外資期貨未平口數 = 外資大台未平口數 + 外資小台未平口數 / 4
 
-web = bs(get(f'https://www.taifex.com.tw/cht/3/dailyFXRate?queryStartDate={date}&queryEndDate={date}').text, 'lxml')
+web = bs(get(f'https://www.taifex.com.tw/cht/3/dailyFXRate?queryStartDate={date}&queryEndDate={date}', verify=False).text, 'lxml')
 美元匯率 = web.findAll('table')[2].findAll('tr')[1].findAll('td')[1].text.strip()
 
-web = bs(get(f'https://www.taifex.com.tw/cht/3/callsAndPutsDate?queryType=1&queryDate={date}&commodityId=TXO').text, 'lxml')
+web = bs(get(f'https://www.taifex.com.tw/cht/3/callsAndPutsDate?queryType=1&queryDate={date}&commodityId=TXO', verify=False).text, 'lxml')
 外資買權金額 = web.findAll('table')[2].findAll('tr')[7].findAll('td')[11].text.strip().replace(',', '')
 外資賣權金額 = web.findAll('table')[2].findAll('tr')[10].findAll('td')[11].text.strip().replace(',', '')
 
-web = bs(get(f'https://www.taifex.com.tw/cht/3/pcRatio?queryStartDate={date}&queryEndDate={date}').text, 'lxml')
+web = bs(get(f'https://www.taifex.com.tw/cht/3/pcRatio?queryStartDate={date}&queryEndDate={date}', verify=False).text, 'lxml')
 PC_ratio = web.findAll('table')[3].findAll('tr')[1].findAll('td')[-1].text
 
-web = bs(get(f'https://www.taifex.com.tw/cht/3/largeTraderFutQry?queryDate={date}&contractId=TX').text, 'lxml')
+web = bs(get(f'https://www.taifex.com.tw/cht/3/largeTraderFutQry?queryDate={date}&contractId=TX', verify=False).text, 'lxml')
 前十大所有買方 = int(web.findAll('table')[2].findAll('tr')[-1].findAll('td')[3].text.split()[0].replace(',', ''))
 前十大所有賣方 = int(web.findAll('table')[2].findAll('tr')[-1].findAll('td')[7].text.split()[0].replace(',', ''))
 前十大所有 = 前十大所有買方 - 前十大所有賣方
@@ -46,7 +48,7 @@ web = bs(get(f'https://www.taifex.com.tw/cht/3/largeTraderFutQry?queryDate={date
 前十大近月 = 前十大近月買方 - 前十大近月賣方
 前十大未來看法 = 前十大所有 - 前十大近月
 
-web = bs(get(f'https://www.taifex.com.tw/cht/3/futDailyMarketReport?commodity_id=MTX&queryDate={date}').text, 'lxml')
+web = bs(get(f'https://www.taifex.com.tw/cht/3/futDailyMarketReport?commodity_id=MTX&queryDate={date}', verify=False).text, 'lxml')
 小台全部未沖銷 = int(web.findAll('table')[4].findAll('td', class_='12bk')[-1].text)
 散戶看多 = 小台全部未沖銷 - 外資小台未平多方 - 投信小台未平多方 - 自營小台未平多方
 散戶看空 = 小台全部未沖銷 - 外資小台未平空方 - 投信小台未平空方 - 自營小台未平空方
